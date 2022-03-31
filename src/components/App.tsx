@@ -20,20 +20,26 @@ function App() {
   }
   const addLocation = async (term: string) => {
     resetAlerts();
-    const location = await searchLocation(term);
-    /*const location = {
-                        coord: {lon: 1, lat: 1} as Coordinates,
-                        id: locations.length,
-                        name: term
-                      } as WeatherLocation*/
-    console.log('location', location, locations.length)
+    
     //setLocations([location, ...locations]);
-    if (!location) {
-      setError(`No location found called '${term}'`);
-    } else if (locations.find(item => item.id === location.id)) {
-      setWarning(`Location '${term}' is already in the list.`);
+    const item = locations.find(item => item.name === term)
+    if (item) {
+      console.log('item found', item)
+      setCurrentLocation(item)
     } else {
-      setLocations([location, ...locations]);
+      const location = await searchLocation(term);
+      /*const location = {
+                          coord: {lon: 1, lat: 1} as Coordinates,
+                          id: locations.length,
+                          name: term
+                        } as WeatherLocation*/
+      console.log('location', location, locations.length)
+      if (location) {
+        setLocations([location, ...locations]);
+        setCurrentLocation(location)
+      } else {
+        setError(`Location '${term}' not found.`);
+      }
     }
   }
     
@@ -42,7 +48,7 @@ function App() {
     <div>
       <h1>Weather App</h1>
 
-      <LocationSearch onSearch={addLocation}/>
+      <LocationSearch onSearch={addLocation} previousLocations={locations}/>
       {
         error
           ? <div>{error}</div>
@@ -53,8 +59,8 @@ function App() {
           ? <div>{warning}</div>
           : null
       }
-
-      <LocationTable locations={locations} current={currentLocation} onSelect={location => setCurrentLocation(location)}/>
+      
+      {/*<LocationTable locations={locations} current={currentLocation} onSelect={location => setCurrentLocation(location)}/>*/}
       <WeatherSummary location={currentLocation}/>
     </div>
   );
