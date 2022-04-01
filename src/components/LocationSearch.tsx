@@ -17,7 +17,7 @@ export const LocationSearch: FC<LocationSearchProps> = ({ onSearch, previousLoca
   return (
     <div>
       <label>
-        Add Location
+        Location:
           <input
             list="previousLocations"
             type="text"

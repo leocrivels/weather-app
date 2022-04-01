@@ -45,7 +45,7 @@ function App() {
     
 
   return (
-    <div>
+    <div style={{backgroundColor: 'ghostwhite'}}>
       <h1>Weather App</h1>
 
       <LocationSearch onSearch={addLocation} previousLocations={locations}/>
