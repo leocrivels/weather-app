@@ -1,4 +1,5 @@
 import {WeatherLocation, Weather} from '../model/Weather';
+import { convertUnixTimeToDate } from '../utils/DateTimeHelper';
 
 const key: string = process.env.REACT_APP_OPEN_WEATHER_API_KEY as string;
 
@@ -38,3 +39,33 @@ export async function readForecast(locationId: number, units: string): Promise<W
 
     return (await forecast.json()).list;
   }
+
+/*export async function readDailyForecast(locationId: number, units: string): Promise<Weather[]> {
+    const result = await readForecast(locationId, units);
+
+    let nextDay: Date = convertUnixTimeToDate(result[0].dt);
+      nextDay.setDate(nextDay.getDate() + 1);
+      nextDay.setHours(0, 0, 0, 0);
+      let forecastsByDay: ForecastsByDay[] = [];
+      let currentDayForecasts: Weather[] = [];
+      result.forEach((element) => {
+        const elementDate = convertUnixTimeToDate(element.dt);
+        if (elementDate < nextDay) {
+          currentDayForecasts.push(element);
+        } else {
+          forecastsByDay.push({
+            forecasts: currentDayForecasts,
+            dt:
+              convertUnixTimeToDate(currentDayForecasts[0].dt).setHours(0,0,0,0) / 1000,
+          });
+          currentDayForecasts = [];
+          currentDayForecasts.push(element);
+          nextDay.setDate(elementDate.getDate() + 1);
+          nextDay.setHours(0, 0, 0, 0);
+        }
+      });
+
+      console.log("forecastsByDay", forecastsByDay);
+
+    return (await forecast.json()).list;
+  }*/
