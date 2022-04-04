@@ -10,7 +10,15 @@ interface WeatherEntryProps {
   current?: true;
 }
 
-export const WeatherEntry: FC<WeatherEntryProps> = ({ weather, tempScale, current }) => (
+/**
+ * Displays the weather data.
+ * @param { weather, tempScale, current }
+ */
+export const WeatherEntry: FC<WeatherEntryProps> = ({
+  weather,
+  tempScale,
+  current,
+}) => (
   <WeatherFrame current={current}>
     <div style={{ fontSize: "0.9em", fontWeight: "Bold" }}>
       {convertUnixTimeToDate(weather.dt).toLocaleTimeString()}

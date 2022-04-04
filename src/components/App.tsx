@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
+import "./App.css";
 import { LocationSearch } from "./LocationSearch";
 import { WeatherLocation } from "../model/Weather";
 import { searchLocation, getLocationByCoord } from "../services/WeatherService";
 
-import "./App.css";
 import { WeatherSummary } from "./WeatherSummary";
 import {
   Button,
@@ -11,7 +11,7 @@ import {
   ToolBarWrapper,
   Error,
   Warning,
-  IdleDiv
+  IdleDiv,
 } from "../styles/basicComponents";
 
 function App() {
@@ -22,11 +22,18 @@ function App() {
   const [error, setError] = useState("");
   const [warning, setWarning] = useState("");
 
+  /**
+   * Resets error and warning messages
+   */
   const resetAlerts = () => {
     setError("");
     setWarning("");
   };
 
+  /**
+   * Add location to the list of locations and set the current location to the new location
+   * @param term
+   */
   const addLocation = async (term: string) => {
     resetAlerts();
 
@@ -45,6 +52,9 @@ function App() {
     }
   };
 
+  /**
+   * Try to get the user coordinates to set the current location
+   */
   useEffect(() => {
     if (!currentLocation) {
       navigator.geolocation.getCurrentPosition(async function (position) {
@@ -75,7 +85,9 @@ function App() {
         )}
       </ToolBarWrapper>
       <div>
-        <FlexCentered style={{backgroundColor: "#767B91", padding: "4px 0px"}}>
+        <FlexCentered
+          style={{ backgroundColor: "#767B91", padding: "4px 0px" }}
+        >
           <LocationSearch
             onSearch={addLocation}
             previousLocations={locations}
@@ -83,11 +95,13 @@ function App() {
         </FlexCentered>
         {error ? <Error>{error}</Error> : null}
         {warning ? <Warning>{warning}</Warning> : null}
-        {currentLocation ? 
-          <WeatherSummary location={currentLocation} tempScale={tempScale}/>
-          : 
-          <IdleDiv>Search for the location you want to see the weather.</IdleDiv>
-          }
+        {currentLocation ? (
+          <WeatherSummary location={currentLocation} tempScale={tempScale} />
+        ) : (
+          <IdleDiv>
+            Search for the location you want to see the weather.
+          </IdleDiv>
+        )}
       </div>
     </div>
   );

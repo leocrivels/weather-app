@@ -11,7 +11,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Chart, Line } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 
 ChartJS.register(
   CategoryScale,
@@ -27,6 +27,11 @@ interface TempChartProps {
   forecasts: Weather[];
 }
 
+/**
+ * Renders a chart of the temperature in the forecasts over time.
+ * @param { forecasts }
+ * @returns
+ */
 export const TempChart: FC<TempChartProps> = ({ forecasts }) => {
   const [data, setData] = useState({
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
@@ -40,6 +45,7 @@ export const TempChart: FC<TempChartProps> = ({ forecasts }) => {
       },
     ],
   });
+
   useEffect(() => {
     var chartData: number[] = [];
     var dataset: string[] = [];

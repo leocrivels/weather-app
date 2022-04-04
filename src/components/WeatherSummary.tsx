@@ -1,19 +1,13 @@
 import { FC, useEffect, useState } from "react";
 import { Weather, WeatherLocation } from "../model/Weather";
-import {
-  readWeather,
-  readDailyForecast,
-} from "../services/WeatherService";
+import { readWeather, readDailyForecast } from "../services/WeatherService";
 import { WeatherEntry } from "./WeatherEntry";
-import { DaySelector} from "./DaySelector";
+import { DaySelector } from "./DaySelector";
 import { TempChart } from "./TempChart";
 import { LeafletMap } from "./LeafletMap";
 import "../utils/DateTimeHelper";
 import { LatLngTuple } from "leaflet";
-import {
-  Title,
-  FlexCentered,
-} from "../styles/basicComponents";
+import { Title, FlexCentered } from "../styles/basicComponents";
 import {
   MainWeather,
   SummaryOffset,
@@ -30,6 +24,14 @@ interface ForecastsByDay {
   dt: number;
 }
 
+/**
+ * Display all weather and forecasts data for a given location.
+ * @param {
+ *   location,
+ *   tempScale,
+ * }
+ * @returns
+ */
 export const WeatherSummary: FC<WeatherSummaryProps> = ({
   location,
   tempScale,
@@ -37,7 +39,13 @@ export const WeatherSummary: FC<WeatherSummaryProps> = ({
   const [weather, setWeather] = useState<Weather | null>(null);
   const [forecastsByDay, setForecastsByDay] = useState<ForecastsByDay[]>([]);
   const [filterIndex, setFilterIndex] = useState<number>(0);
-  const onFilterChange = (index:number) => {setFilterIndex(index)};
+  const onFilterChange = (index: number) => {
+    setFilterIndex(index);
+  };
+
+  /**
+   * Retrieve the forecasts data from the open weather api.
+   */
   useEffect(() => {
     (async function () {
       if (location) {
@@ -70,16 +78,20 @@ export const WeatherSummary: FC<WeatherSummaryProps> = ({
           console.log("clicou no mapa", e);
         }}
       >
-        <WeatherEntry weather={weather} tempScale={tempScale} current/>
+        <WeatherEntry weather={weather} tempScale={tempScale} current />
         <LeafletMap defaultLatLng={mapCenter}></LeafletMap>
       </MainWeather>
 
       <div>
         {<h1>Forecasts:</h1>}
-        <DaySelector filterIndex={filterIndex} onChange={onFilterChange} forecastsByDay={forecastsByDay}></DaySelector>
+        <DaySelector
+          filterIndex={filterIndex}
+          onChange={onFilterChange}
+          forecastsByDay={forecastsByDay}
+        ></DaySelector>
       </div>
       {forecastsByDay[filterIndex] ? (
-        <div style={{width:'100%'}}>
+        <div style={{ width: "100%" }}>
           <ForecastList>
             {forecastsByDay[filterIndex].forecasts.map((timePoint, index) => {
               return (

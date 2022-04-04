@@ -8,6 +8,14 @@ interface LocationSearchProps {
   previousLocations: WeatherLocation[] | null;
 }
 
+/**
+ * Search for a location by name and lists the previous locations
+ * @param {
+ *   onSearch,
+ *   previousLocations,
+ * }
+ * @returns
+ */
 export const LocationSearch: FC<LocationSearchProps> = ({
   onSearch,
   previousLocations,

@@ -10,6 +10,11 @@ interface LeafletMapProps {
   defaultLatLng: LatLngTuple;
 }
 
+/**
+ * A component that displays a map from leaflet with a tile layer from OpenWeatherMap.
+ * @param { defaultLatLng }
+ * @returns
+ */
 export const LeafletMap: FC<LeafletMapProps> = ({ defaultLatLng }) => {
   return (
     <MapContainerResized center={defaultLatLng} zoom={13}>

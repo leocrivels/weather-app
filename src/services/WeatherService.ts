@@ -11,8 +11,12 @@ const keyQuery = `appid=${key}`
 const server = 'http://api.openweathermap.org/data/2.5';
 const serverGeoEndpoint = 'http://api.openweathermap.org/geo/1.0'
 
+/**
+ * Searchs location by name
+ * @param term 
+ * @returns location 
+ */
 export async function searchLocation(term: string): Promise<WeatherLocation | undefined> {
-  console.log('teste', navigator.connection)
   const result = await fetch(`${server}/weather?q=${term}&${keyQuery}`);
 
   if (result.status === 404) return undefined;
@@ -21,8 +25,13 @@ export async function searchLocation(term: string): Promise<WeatherLocation | un
   return await result.json();
 }
 
+/**
+ * Gets location by coord
+ * @param lat 
+ * @param lon 
+ * @returns location by coord 
+ */
 export async function getLocationByCoord(lat: number, lon: number): Promise<LocationName[] | undefined> {
-  console.log('teste', navigator.connection)
   const result = await fetch(`${serverGeoEndpoint}/reverse?lat=${lat}&lon=${lon}&limit=1&${keyQuery}`);
 
   if (result.status === 404) return undefined;
@@ -31,6 +40,12 @@ export async function getLocationByCoord(lat: number, lon: number): Promise<Loca
   return await result.json();
 }
 
+/**
+ * Reads current weather
+ * @param locationId 
+ * @param units 
+ * @returns weather 
+ */
 export async function readWeather(locationId: number, units: string): Promise<Weather> {
   const current = await fetch(`${server}/weather?id=${locationId}&${keyQuery}&units=${units}`);
 
@@ -39,10 +54,21 @@ export async function readWeather(locationId: number, units: string): Promise<We
   return await current.json();
 }
 
+/**
+ * Gets Open Weather icon url
+ * @param code 
+ * @returns icon url 
+ */
 export function getIconUrl(code: string): string {
   return `http://openweathermap.org/img/wn/${code}.png`;
 }
 
+/**
+ * Reads forecast for next 5 days
+ * @param locationId 
+ * @param units 
+ * @returns forecast 
+ */
 export async function readForecast(locationId: number, units: string): Promise<Weather[]> {
   const forecast = await fetch(`${server}/forecast?id=${locationId}&${keyQuery}&units=${units}`);
 
@@ -51,6 +77,13 @@ export async function readForecast(locationId: number, units: string): Promise<W
   return (await forecast.json()).list;
 }
 
+/**
+ * Reads forecast for next 5 days by coord
+ * @param lat 
+ * @param lon 
+ * @param units 
+ * @returns forecast by coord 
+ */
 export async function readForecastByCoord(lat: number, lon: number, units: string): Promise<Weather[]> {
   const forecast = await fetch(`${server}/forecast?lat=${lat}&lat=${lon}&${keyQuery}&units=${units}`);
 
@@ -58,6 +91,13 @@ export async function readForecastByCoord(lat: number, lon: number, units: strin
 
   return (await forecast.json()).list;
 }
+
+/**
+ * Reads forecast for next 5 days and separate by day
+ * @param locationId 
+ * @param units 
+ * @returns daily forecast 
+ */
 export async function readDailyForecast(locationId: number, units: string): Promise<ForecastsByDay[]> {
     const result = await readForecast(locationId, units);
 

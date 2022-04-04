@@ -9,6 +9,15 @@ interface LocationSearchProps {
   filterIndex: number;
 }
 
+/**
+ * A component that displays a list of available days in the forecasts and allows the user to select one.
+ * @param {
+ *   onChange,
+ *   forecastsByDay,
+ *   filterIndex,
+ * }
+ * @returns
+ */
 export const DaySelector: FC<LocationSearchProps> = ({
   onChange,
   forecastsByDay,
@@ -23,7 +32,7 @@ export const DaySelector: FC<LocationSearchProps> = ({
     >
       {forecastsByDay
         ? forecastsByDay.map((forecast, index) => (
-            <option value={index}>
+            <option key={index} value={index}>
               {convertUnixTimeToDate(forecast.dt).toLocaleDateString()}
             </option>
           ))
