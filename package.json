@@ -47,6 +47,7 @@
     ]
   },
   "devDependencies": {
+    "@types/chart.js": "^2.9.36",
     "@types/styled-components": "^5.1.24"
   }
 }

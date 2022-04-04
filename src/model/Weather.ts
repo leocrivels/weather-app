@@ -1,13 +1,18 @@
 export interface Coordinates {
-    lon: number;
-    lat: number;
-  }
-  
+  lon: number;
+  lat: number;
+}
+
 export interface WeatherLocation {
-    coord: Coordinates;
-    id: number;
-    name: string;
-  }
+  coord: Coordinates;
+  id: number;
+  name: string;
+}
+
+export interface ForecastsByDay {
+  forecasts: Weather[];
+  dt: number;
+}
 
 export interface LocationName {
   name: string;

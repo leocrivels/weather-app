@@ -1,4 +1,4 @@
-import {WeatherLocation, Weather, LocationName} from '../model/Weather';
+import { WeatherLocation, Weather, LocationName, ForecastsByDay } from '../model/Weather';
 import { convertUnixTimeToDate } from '../utils/DateTimeHelper';
 
 export const key: string = process.env.REACT_APP_OPEN_WEATHER_API_KEY as string;
@@ -12,53 +12,53 @@ const server = 'http://api.openweathermap.org/data/2.5';
 const serverGeoEndpoint = 'http://api.openweathermap.org/geo/1.0'
 
 export async function searchLocation(term: string): Promise<WeatherLocation | undefined> {
-    console.log('teste',navigator.connection)
-    const result = await fetch(`${server}/weather?q=${term}&${keyQuery}`);
-  
-    if (result.status === 404) return undefined;
-    if (result.status !== 200) throw new Error('Failed to read location data');
-  
-    return await result.json();
-  }
+  console.log('teste', navigator.connection)
+  const result = await fetch(`${server}/weather?q=${term}&${keyQuery}`);
 
-  export async function getLocationByCoord(lat: number, lon: number): Promise<LocationName[] | undefined> {
-    console.log('teste',navigator.connection)
-    const result = await fetch(`${serverGeoEndpoint}/reverse?lat=${lat}&lon=${lon}&limit=1&${keyQuery}`);
-  
-    if (result.status === 404) return undefined;
-    if (result.status !== 200) throw new Error('Failed to read location data');
-  
-    return await result.json();
-  }
+  if (result.status === 404) return undefined;
+  if (result.status !== 200) throw new Error('Failed to read location data');
+
+  return await result.json();
+}
+
+export async function getLocationByCoord(lat: number, lon: number): Promise<LocationName[] | undefined> {
+  console.log('teste', navigator.connection)
+  const result = await fetch(`${serverGeoEndpoint}/reverse?lat=${lat}&lon=${lon}&limit=1&${keyQuery}`);
+
+  if (result.status === 404) return undefined;
+  if (result.status !== 200) throw new Error('Failed to read location data');
+
+  return await result.json();
+}
 
 export async function readWeather(locationId: number, units: string): Promise<Weather> {
-    const current = await fetch(`${server}/weather?id=${locationId}&${keyQuery}&units=${units}`);
-  
-    if (current.status !== 200) throw new Error('Failed to read location data');
-  
-    return await current.json();
-  }
+  const current = await fetch(`${server}/weather?id=${locationId}&${keyQuery}&units=${units}`);
+
+  if (current.status !== 200) throw new Error('Failed to read location data');
+
+  return await current.json();
+}
 
 export function getIconUrl(code: string): string {
-    return `http://openweathermap.org/img/wn/${code}.png`;
-  }
+  return `http://openweathermap.org/img/wn/${code}.png`;
+}
 
 export async function readForecast(locationId: number, units: string): Promise<Weather[]> {
-    const forecast = await fetch(`${server}/forecast?id=${locationId}&${keyQuery}&units=${units}`);
+  const forecast = await fetch(`${server}/forecast?id=${locationId}&${keyQuery}&units=${units}`);
 
-    if (forecast.status !== 200) throw new Error('Failed to read location data');
+  if (forecast.status !== 200) throw new Error('Failed to read location data');
 
-    return (await forecast.json()).list;
-  }
+  return (await forecast.json()).list;
+}
 
-  export async function readForecastByCoord(lat: number, lon: number, units: string): Promise<Weather[]> {
-    const forecast = await fetch(`${server}/forecast?lat=${lat}&lat=${lon}&${keyQuery}&units=${units}`);
+export async function readForecastByCoord(lat: number, lon: number, units: string): Promise<Weather[]> {
+  const forecast = await fetch(`${server}/forecast?lat=${lat}&lat=${lon}&${keyQuery}&units=${units}`);
 
-    if (forecast.status !== 200) throw new Error('Failed to read location data');
+  if (forecast.status !== 200) throw new Error('Failed to read location data');
 
-    return (await forecast.json()).list;
-  }
-/*export async function readDailyForecast(locationId: number, units: string): Promise<Weather[]> {
+  return (await forecast.json()).list;
+}
+export async function readDailyForecast(locationId: number, units: string): Promise<ForecastsByDay[]> {
     const result = await readForecast(locationId, units);
 
     let nextDay: Date = convertUnixTimeToDate(result[0].dt);
@@ -83,7 +83,5 @@ export async function readForecast(locationId: number, units: string): Promise<W
         }
       });
 
-      console.log("forecastsByDay", forecastsByDay);
-
-    return (await forecast.json()).list;
-  }*/
+    return (await forecastsByDay);
+  }
