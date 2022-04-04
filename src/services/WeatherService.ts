@@ -1,7 +1,7 @@
-import {WeatherLocation, Weather} from '../model/Weather';
+import {WeatherLocation, Weather, LocationName} from '../model/Weather';
 import { convertUnixTimeToDate } from '../utils/DateTimeHelper';
 
-const key: string = process.env.REACT_APP_OPEN_WEATHER_API_KEY as string;
+export const key: string = process.env.REACT_APP_OPEN_WEATHER_API_KEY as string;
 
 if (key === undefined) {
   throw new Error('No Open Weather API Key defined - ensure you set a variable called REACT_APP_OPEN_WEATHER_API_KEY')
@@ -9,10 +9,21 @@ if (key === undefined) {
 
 const keyQuery = `appid=${key}`
 const server = 'http://api.openweathermap.org/data/2.5';
+const serverGeoEndpoint = 'http://api.openweathermap.org/geo/1.0'
 
 export async function searchLocation(term: string): Promise<WeatherLocation | undefined> {
     console.log('teste',navigator.connection)
     const result = await fetch(`${server}/weather?q=${term}&${keyQuery}`);
+  
+    if (result.status === 404) return undefined;
+    if (result.status !== 200) throw new Error('Failed to read location data');
+  
+    return await result.json();
+  }
+
+  export async function getLocationByCoord(lat: number, lon: number): Promise<LocationName[] | undefined> {
+    console.log('teste',navigator.connection)
+    const result = await fetch(`${serverGeoEndpoint}/reverse?lat=${lat}&lon=${lon}&limit=1&${keyQuery}`);
   
     if (result.status === 404) return undefined;
     if (result.status !== 200) throw new Error('Failed to read location data');
@@ -40,6 +51,13 @@ export async function readForecast(locationId: number, units: string): Promise<W
     return (await forecast.json()).list;
   }
 
+  export async function readForecastByCoord(lat: number, lon: number, units: string): Promise<Weather[]> {
+    const forecast = await fetch(`${server}/forecast?lat=${lat}&lat=${lon}&${keyQuery}&units=${units}`);
+
+    if (forecast.status !== 200) throw new Error('Failed to read location data');
+
+    return (await forecast.json()).list;
+  }
 /*export async function readDailyForecast(locationId: number, units: string): Promise<Weather[]> {
     const result = await readForecast(locationId, units);
 

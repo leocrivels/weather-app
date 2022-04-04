@@ -3,8 +3,10 @@ import { Weather, WeatherLocation } from "../model/Weather";
 import { readForecast, readWeather } from "../services/WeatherService";
 import { WeatherEntry } from "./WeatherEntry";
 import { TempChart } from "./TempChart";
+import { LeafletMap } from "./LeafletMap";
 import "../utils/DateTimeHelper";
 import { convertUnixTimeToDate } from "../utils/DateTimeHelper";
+import { LatLngTuple } from 'leaflet';
 
 interface WeatherSummaryProps {
   location: WeatherLocation | null;
@@ -68,7 +70,8 @@ export const WeatherSummary: FC<WeatherSummaryProps> = ({ location }) => {
   
   if (!location || !weather || !forecast || !forecastsByDay)
     return null
-
+    
+  const mapCenter: LatLngTuple = [location.coord.lat, location.coord.lon];
   //if (!filteredForecast) setFilteredForecast(forecast)
 
   return (
@@ -83,6 +86,7 @@ export const WeatherSummary: FC<WeatherSummaryProps> = ({ location }) => {
           console.log("clicou no mapa", e);
         }}
       >
+        <LeafletMap defaultLatLng={mapCenter}></LeafletMap>
         <WeatherEntry weather={weather} tempScale={tempScale} />
       </div>
 
@@ -93,6 +97,7 @@ export const WeatherSummary: FC<WeatherSummaryProps> = ({ location }) => {
         <select
           name="days"
           id="days"
+          value={filterIndex}
           onChange={(event) =>
             setFilterIndex(parseInt(event.target.value))
           }
@@ -131,6 +136,7 @@ export const WeatherSummary: FC<WeatherSummaryProps> = ({ location }) => {
         :
         <li>Select Date</li>
       }
+      
     </div>
   );
 };

@@ -1,7 +1,15 @@
 import React from "react";
 import { FC, useState } from "react";
 import { WeatherLocation } from "../model/Weather";
+import styled, {css} from "styled-components";
 
+const Input = styled.input``;
+const Button = styled.button`background: transparent;
+border-radius: 3px;
+border: 2px solid palevioletred;
+color: palevioletred;
+margin: 0.5em 1em;
+padding: 0.25em 1em;`;
 interface LocationSearchProps {
   onSearch: (search: string) => void;
   previousLocations: WeatherLocation[]|null;
@@ -18,7 +26,7 @@ export const LocationSearch: FC<LocationSearchProps> = ({ onSearch, previousLoca
     <div>
       <label>
         Location:
-          <input
+          <Input
             list="previousLocations"
             type="text"
             value={locationSearch}
@@ -34,9 +42,9 @@ export const LocationSearch: FC<LocationSearchProps> = ({ onSearch, previousLoca
             </datalist>
 
       </label>
-      <button onClick={addLocation} disabled={disableSearch}>
+      <Button onClick={addLocation} disabled={disableSearch}>
         Search
-      </button>
+      </Button>
     </div>
   );
 };

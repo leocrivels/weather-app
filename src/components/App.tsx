@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {LocationSearch} from "./LocationSearch";
 import {LocationTable} from "./LocationTable";
 import {WeatherLocation, Coordinates} from '../model/Weather';
-import {searchLocation} from '../services/WeatherService'
+import {searchLocation, getLocationByCoord} from '../services/WeatherService'
 
 import './App.css';
 import { WeatherSummary } from './WeatherSummary';
@@ -42,6 +42,24 @@ function App() {
       }
     }
   }
+
+  useEffect(() => {
+    if (!currentLocation) {
+      console.log('teste')
+      navigator.geolocation.getCurrentPosition(
+        async function (position) {
+          console.log()
+          const city = await getLocationByCoord(position.coords.latitude, position.coords.longitude);
+          if (city) {
+            console.log(`${city[0].name}, ${city[0].state}, ${city[0].country}`)
+            const location = await searchLocation(`${city[0].name}, ${city[0].state}, ${city[0].country}`);
+            if(location) {
+              setCurrentLocation(location);
+            }
+          }
+        })
+      }
+    })
     
 
   return (
